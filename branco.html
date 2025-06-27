@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraseologias</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #000000;
+            text-align: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        /* Grid Container for the buttons */
+        .accordion-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 equal columns */
+            gap: 15px; /* Space between items */
+        }
+        .accordion {
+            background-color: #e7f3ff;
+            color: #1c1e21;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.4s;
+            border-radius: 5px;
+        }
+        .active, .accordion:hover {
+            background-color: #d0e7ff;
+        }
+        .panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .copy-link {
+            display: block;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.2s;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+        }
+        .copy-link:hover {
+            background-color: #e9e9e9;
+            cursor: pointer;
+        }
+        #copy-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 16px;
+            border-radius: 5px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fraseologias</h1>
+
+        <div class="accordion-grid">
+            
+            <div class="accordion-item">
+                <button class="accordion">Saudações</button>
+                <div class="panel">
+                    <a class="copy-link">Bom dia, em que posso ajudar ?</a>
+                    <a class="copy-link">Boa tarde, em que posso ajudar ?</a>
+                    <a class="copy-link">Boa noite, em que posso ajudar ?</a>
+                    <a class="copy-link">Bom dia, só um momento vou verificar.</a>
+                    <a class="copy-link">Boa tarde, só um momento vou verificar.</a>
+                    <a class="copy-link">Boa noite, só um momento vou verificar.</a>
+                    <a class="copy-link">Disponha, bom dia.</a>
+                    <a class="copy-link">Disponha, boa tarde.</a>
+                    <a class="copy-link">Disponha, boa noite.</a>
+                    <a class="copy-link">Qualquer dúvida ou dificuldade estamos a disposição, tenha um bom dia.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Suporte</button>
+                <div class="panel">
+                    <a class="copy-link">Desligue o seu roteador e a caixa da fibra da energia e mantenha desligados, vou realizar um teste daqui.<br>Assim que desligar me informe, por favor.</a>
+                    <a class="copy-link">Desligue o seu roteador da energia e mantenha desligado, vou realizar um teste daqui.<br>Assim que desligar me informe, por favor.</a>
+                    <a class="copy-link">Ligue novamente o seu roteador, por favor.</a>
+                    <a class="copy-link">Ligue somente a caixa da fibra, por favor.</a>
+                    <a class="copy-link">Religue os 2 equipamentos, por favor.</a>
+                    <a class="copy-link">A caixinha da fibra, o aparelho branco pequeno sem antena, está com uma luz vermelha acessa ?</a>
+                    <a class="copy-link">Da caixa da fibra saem 3 fios, qual a cor do fio do meio?</a>
+                    <a class="copy-link">Esse fio vai para o seu roteador, ele está conectado atrás no roteador em qual porta ?</a>
+                    <a class="copy-link">Desligue o seu roteador e a caixinha da fibra da energia por 1 minuto e ligue novamente.<br>Assim que voltar a sua rede, verifique se normalizou.</a>
+                    <a class="copy-link">Sua conexão irá reiniciar, assim que voltar a rede, verifique se normalizou.</a>
+                    <a class="copy-link">Vou realizar algumas configurações na sua rede, a conexão irá cair algumas vezes.</a>
+                    <a class="copy-link">Desligue a TV da energia, aguarde 10 segundos e religue a TV.<br>Assim que a TV religar vá nas configurações de rede e internet e verifique se está conectada a rede wifi.<br>Verifique se normalizou.</a>
+                    <a class="copy-link">Se uma mesma frequência é utilizada simultaneamente entre diferentes sistemas, ocorre interferência e nenhum dos serviços funciona direito.</a>
+                    <a class="copy-link">O wifi é uma onda de rádio e pode sofrer  interferência de outra onda, como um roteador de vizinha setado no mesmo canal que o seu.<br>Vou alterar o canal wifi e reiniciar a sua conexão, assim que voltar a rede verifique se normalizou.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">LINK LOSS</button>
+                <div class="panel">
+                    <a class="copy-link">SEM ACESSO, ALARM: -----, ULTIMO ACESSO: 00/00/0000 00:00:00, CTO - 0000.<br>PERÍODO DE DISPONIBILIDADE: MATUTINO/VESPERTINO, FALADO COM: --, TEL: (00) 0000-0000</a>
+                    <a class="copy-link">Há um problema com a sua fibra óptica, vou gerar uma ordem de serviço para o técnico ir até o local realizar o reparo.</a>
+                    <a class="copy-link">O prazo máximo para o reparo é de até 48 horas.<br>O técnico responsável entrará em contato via telefone.</a>
+                    <a class="copy-link">Terá alguem no local no período da manhã ou tarde ?</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Senha Wifi</button>
+                <div class="panel">
+                    <a class="copy-link">Senha alterada para "         ", sua conexão irá reiniciar, assim que voltar insira a senha nova.</a>
+                    <a class="copy-link">Nome da rede alterada para "        ", sua conexão irá reiniciar, assim que voltar insira a senha.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Lentidão/Quedas</button>
+                <div class="panel">
+                    <a class="copy-link">O wifi é uma onde de rádio, distancia, quantidade de paredes no caminho e interferências de outras redes interferem na distância de transmissão.</a>
+                    <a class="copy-link">Em qual equipamento foi notado o problema: computador, celular, smarttv, tvbox ?</a>
+                    <a class="copy-link">O problema foi notado em algum site ou aplicativo em específico ?</a>
+                    <a class="copy-link">A tv esta conectada via wifi ou cabo de rede ?</a>
+                    <a class="copy-link">A tv esta via aplicativo da tv, chromecast/firestick ou tvbox/iptv ?</a>
+                    <a class="copy-link">O nome do wifi deste equipamento é " - " e tem " - " equipamentos conectados, qual equipamento não conecta ?</a>
+                    <a class="copy-link">Verifique se aparece a rede "         " e tente se conectar.<br>Se aparecer algum erro me informe, por favor.</a>
+                </div>
+            </div>
+            
+             <div class="accordion-item">
+                <button class="accordion">Whatsapp Aviso</button>
+                <div class="panel">
+                    <a class="copy-link">Nosso atendimento via whatsapp é por ordem de chegada, se tiver urgência/emergência entre em contato conosco via telefone,<br>nosso telefone é o 0800-774-7878 opção "Suporte Técnico".</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">IPTV/TVBOX</button>
+                <div class="panel">
+                    <a class="copy-link">Esse tipo de aparelho não é homologado pela ANATEL e considerado por ela como pirataria, tem servidor próprio, não depende do seu provedor de internet.<br>Faça um teste, abra um video no youtube pelo seu celular,se rodar sem travamentos o problema é no seu Tvbox/Iptv, contacte o seu forncedor de IPTV.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Rede Indisponível</button>
+                <div class="panel">
+                     <a class="copy-link">Segure o dedo por 2 segundos no simbolo do seu wifi, vai aparecer uma opção "Esquecer Rede", selecione esquecer rede, se conecte novamente ao seu wifi e digite a senha da rede.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Transferir para Financeiro</button>
+                <div class="panel">
+                    <a class="copy-link">Constatei que não há problema com relação a suporte técnico, vou lhe transferir para o setor responsável, só um momento.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Acesso Remoto</button>
+                <div class="panel">
+                    <a class="copy-link">Entre no nosso site https://netrubifibra.com.br<br>Coloque a cidade e click em OK.<br>Desça a página até o final, no canto direito tem "ACESSO REMOTO - TEAM VIEWER".<br>Baixe e instale o programa, abra-o e me informe a sua ID.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Teste de Velocidade</button>
+                <div class="panel">
+                    <a class="copy-link">Durante o teste deixe somente o aparelho que irá testar conectado na rede.<br>Seu plano de 100mb se divide entre os aparelhos conectados, por exemplo se conectar 2 equipamentos, vai em média 50mb para cada, <br>se conectar 4 equipamentos, vai em média 25mb para cada e assim por diante.</a>
+                    <a class="copy-link">Seu plano se divide para todos os equipamentos conectados na rede, no momento tem 6 dispositivos.<br>Durante o teste deixe somente o aparelho que irá testar conectado na rede.<br>Fique próximo do seu roteador e faça o teste.<br>Se o teste for feito pela rede 2.4Ghz " Garcia " vai bater entre 30mb á  50mb dependendo do adaptador de rede do smartfone.<br>Se o teste for feito pela rede 5.8Ghz " Garcia-5G" o teste batera entre 75mb á 100mb dependendo do adaptador de rede do smartfone.</a>
+                    <a class="copy-link">O seu roteador entrega 100mb, porém para o seu aparelho receber os 100mb somente para ele o aparelho tem que ser compativel com a tecnologia 5.8Ghz a/c.<br>Verifique se o seu aparelho ou outro da residencia reconhece a rede " Garcia-5G " e refaça o teste.<br>Via computador cabeado também passa os 100mb para um único aparelho.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Central do Cliente</button>
+                <div class="panel">
+                    <a class="copy-link">Entre no nosso site https://netrubifibra.com.br<br><br>Coloque a cidade e click em OK.<br>Vá em 'Central do Cliente', se for o primeiro acesso, digite o CPF e a senha os 4 primeiros digitos do CPF.<br>Vai pedir para criar uma senha, crie, e faça o login com o usuário e senha novos.<br>Se a senhora preferir pode ir até a loja.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Garantia de Velocidade</button>
+                <div class="panel">
+                    <a class="copy-link">A garantia de entrega é sempre via Cabo com dispositivo compativel com placa gigabit.<br>Caso não tenha um computador cabeado realize o teste conectaco a sua rede " Fernanda_5G "<br>O wifi é uma onda de rádio da qual não temos controle total.<br>Modelos de dispositivos assim como interferencias, objetos; paredes, etc, alteraram a velocidade da banda.<br>Conecte o dispositivo do teste na rede " Fernanda_5G " fique próxima do seu roteador e realize o teste.</a>
+                </div>
+            </div>
+
+        </div> </div>
+
+    <div id="copy-toast">Copiado!</div>
+
+    <script>
+        // --- Accordion Logic ---
+        var acc = document.getElementsByClassName("accordion");
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+
+        // --- Copy to Clipboard Logic ---
+        var copyLinks = document.getElementsByClassName("copy-link");
+        var toast = document.getElementById("copy-toast");
+
+        for (var i = 0; i < copyLinks.length; i++) {
+            copyLinks[i].addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent link from navigating
+                
+                // .innerText correctly interprets <br> as a newline character
+                var textToCopy = this.innerText; 
+
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    // Show toast notification
+                    toast.style.opacity = 1;
+                    setTimeout(function() {
+                        toast.style.opacity = 0;
+                    }, 1500); // Hide after 1.5 seconds
+                }).catch(function(err) {
+                    console.error('Failed to copy text: ', err);
+                    alert("Erro ao copiar texto.");
+                });
+            });
+        }
+    </script>
+
+</body>
+</html>

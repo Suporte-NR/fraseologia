@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraseologias // Super Mario World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mario-sky-blue: #6B8EFE; /* Classic Mario sky blue */
+            --mario-grass-green: #7AC850; /* Classic Mario grass/pipe green */
+            --mario-block-brown: #A0522D; /* Sienna, for blocks */
+            --mario-question-block-yellow: #FFD700; /* Gold */
+            --mario-question-block-border: #DAA520; /* Darker Gold */
+            --mario-text-white: #FFFFFF;
+            --mario-text-dark: #333333;
+            --mario-pipe-green: #008000; /* Darker green for pipes */
+            --mario-pipe-border: #006400; /* Even darker green */
+
+            --bg-color: var(--mario-sky-blue);
+            --text-color: var(--mario-text-dark);
+            --primary-color: var(--mario-grass-green);
+            --border-color: var(--mario-block-brown);
+            --container-bg: var(--mario-block-brown);
+            --container-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+
+            --accordion-bg: var(--mario-question-block-yellow);
+            --accordion-border: var(--mario-question-block-border);
+            --accordion-text: var(--mario-text-dark);
+            --accordion-hover-bg: #FFC107; /* Slightly lighter yellow */
+            --accordion-active-bg: #FFC107; /* Same as hover for active */
+
+            --panel-bg: var(--mario-block-brown);
+            --panel-border: var(--mario-question-block-border);
+
+            --copy-link-bg: rgba(255, 255, 255, 0.9); /* White with transparency */
+            --copy-link-hover-bg: rgba(255, 255, 255, 1);
+            --copy-link-text: var(--mario-text-dark);
+
+            --toast-bg: var(--mario-pipe-green);
+            --toast-text: var(--mario-text-white);
+        }
+
+        body {
+            font-family: 'VT323', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+            /* Subtle pixelated cloud pattern */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="25" cy="25" r="10" fill="rgba(255,255,255,0.3)"/><circle cx="75" cy="75" r="10" fill="rgba(255,255,255,0.3)"/></svg>');
+            background-size: 50px 50px; /* Adjust size for subtle effect */
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: var(--container-bg);
+            border: 5px solid var(--border-color); /* Thicker border for block look */
+            box-shadow: var(--container-shadow);
+            padding: 30px;
+            border-radius: 0; /* Sharp edges like blocks */
+            position: relative;
+            overflow: hidden; /* For pipe elements */
+        }
+        /* Decorative pipe elements on container corners */
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: var(--mario-pipe-green);
+            border: 3px solid var(--mario-pipe-border);
+            border-radius: 50%; /* Circular for pipe ends */
+            z-index: -1;
+        }
+        .container::before {
+            top: -25px;
+            left: -25px;
+        }
+        .container::after {
+            bottom: -25px;
+            right: -25px;
+        }
+
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 5px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        h1 {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--mario-text-white);
+            margin: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0px var(--mario-text-dark), 6px 6px 0px rgba(0,0,0,0.3); /* Pixelated shadow */
+            letter-spacing: 3px;
+        }
+        .mario-mushroom {
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+            filter: drop-shadow(4px 4px 0px var(--mario-text-dark)) drop-shadow(6px 6px 0px rgba(0,0,0,0.3));
+            flex-shrink: 0; /* Prevent SVG from shrinking */
+            cursor: pointer;
+        }
+        .one-up-text {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-family: 'Press Start 2P', cursive;
+            color: var(--mario-grass-green);
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 0px var(--mario-text-dark);
+            animation: one-up-animation 1.5s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes one-up-animation {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+        }
+        .search-input {
+            width: calc(100% - 32px);
+            padding: 12px 15px;
+            margin-bottom: 30px;
+            background-color: var(--copy-link-bg);
+            border: 3px solid var(--mario-pipe-green);
+            color: var(--copy-link-text);
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            border-radius: 8px; /* Slightly rounded for pipe-like input */
+            box-shadow: 0 0 10px rgba(0, 128, 0, 0.5);
+        }
+        .search-input::placeholder {
+            color: rgba(51, 51, 51, 0.7);
+        }
+        .search-input:focus {
+            border-color: var(--mario-question-block-yellow);
+            box-shadow: 0 0 15px var(--mario-question-block-yellow);
+        }
+        .accordion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .accordion-item {
+            border: 3px solid var(--accordion-border);
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.3); /* Block shadow */
+            transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+        }
+        .accordion-item:hover {
+            transform: translateY(-3px); /* Slight lift on hover */
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.4);
+        }
+        .accordion {
+            background-color: var(--accordion-bg);
+            color: var(--accordion-text);
+            cursor: pointer;
+            padding: 15px 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: background-color 0.3s;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3); /* Pixelated text shadow */
+        }
+        .accordion:hover {
+            background-color: var(--accordion-hover-bg);
+        }
+        .active {
+            background-color: var(--accordion-active-bg);
+            border-bottom: 3px solid var(--accordion-border); /* Separator for active */
+        }
+        .panel {
+            padding: 0 20px 10px 20px;
+            background-color: var(--panel-bg);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            border-top: 3px solid var(--panel-border); /* Top border for panel */
+        }
+        .copy-link {
+            display: block;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background-color: var(--copy-link-bg);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--copy-link-text);
+            transition: background-color 0.2s, transform 0.1s;
+            border: 2px solid var(--mario-pipe-green); /* Pipe-like border */
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+        }
+        .copy-link:hover {
+            background-color: var(--copy-link-hover-bg);
+            cursor: pointer;
+            transform: translateY(-1px);
+            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
+        }
+        .copy-link:active {
+            transform: translateY(1px);
+            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+        }
+        #copy-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--toast-bg);
+            color: var(--toast-text);
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            font-size: 1rem;
+            box-shadow: 0 0 15px rgba(0, 128, 0, 0.7);
+            border: 2px solid var(--mario-pipe-border);
+        }
+        #copy-toast.show {
+            opacity: 1;
+            transform: translate(-50%, -10px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Fraseologias</h1>
+            <!-- Super Mario Mushroom SVG -->
+            <svg class="mario-mushroom" width="64" height="64" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3,8 h10 v-1 h1 v-1 h1 v-2 h-1 v-1 h-1 v-1 h-2 v1 h-1 v-1 h-2 v1 h-1 v-1 h-2 v1 h-1 v1 h-1 v2 h1 v1 h1 z" fill="#FF0000"/>
+              <path d="M4,9 h8 v1 h1 v3 h-1 v1 h-8 v-1 h-1 v-3 h1 z" fill="#F8D8A8"/>
+              <path d="M5,11 h2 v2 h-2 z" fill="black"/>
+              <path d="M9,11 h2 v2 h-2 z" fill="black"/>
+              <path d="M3,5 h3 v2 h-3 z" fill="white"/>
+              <path d="M10,5 h3 v2 h-3 z" fill="white"/>
+              <path d="M7,2 h2 v2 h-2 z" fill="white"/>
+            </svg>
+        </header>
+
+        <input type="text" id="search-bar" placeholder="Pesquisar frases..." class="search-input">
+        <div class="accordion-grid">
+            
+            <div class="accordion-item">
+                <button class="accordion">Saudações</button>
+                <div class="panel">
+                    <a class="copy-link">Bom dia, em que posso ajudar?</a>
+                    <a class="copy-link">Boa tarde, em que posso ajudar?</a>
+                    <a class="copy-link">Boa noite, em que posso ajudar?</a>
+                    <a class="copy-link">Bom dia, só um momento, vou verificar.</a>
+                    <a class="copy-link">Boa tarde, só um momento, vou verificar.</a>
+                    <a class="copy-link">Boa noite, só um momento, vou verificar.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Finalização</button>
+                <div class="panel">
+		    <a class="copy-link">Verifique se normalizou.</a>
+		    <a class="copy-link">No momento ajudo em algo mais?</a>
+            <a class="copy-link">Qualquer dúvida ou dificuldade, estamos à disposição. Tenha um bom dia.</a>
+                </div>
+            </div>
+
+            <!-- Todos os outros .accordion-item permanecem aqui... -->
+             <div class="accordion-item">
+                <button class="accordion">Suporte</button>
+                <div class="panel">
+  		    <a class="copy-link">Sua conexão irá reiniciar. Assim que a rede voltar, verifique se normalizou.</a>
+		    <a class="copy-link">Desligue o seu roteador e a caixa da fibra da energia e mantenha-os desligados. Vou realizar um teste daqui.<br>Assim que desligar, me informe, por favor.</a>
+            <a class="copy-link">Desligue o seu roteador da energia e mantenha-o desligado. Vou realizar um teste daqui.<br>Assim que desligar, me informe, por favor.</a>
+            <a class="copy-link">Ligue novamente o seu roteador, por favor.</a>
+            <a class="copy-link">Ligue somente a caixa da fibra, por favor.</a>
+            <a class="copy-link">Religue os dois equipamentos, por favor.</a>
+            <a class="copy-link">A caixinha da fibra (o aparelho branco pequeno, sem antena) está com uma luz vermelha acesa?</a>
+		    <a class="copy-link">Tem uma luz laranja acesa no seu roteador?</a>
+		    <a class="copy-link">O roteador está ligado direto na tomada ou em algum adaptador, filtro de linha, extensão, "T", etc.?</a>
+            <a class="copy-link">Da caixa da fibra saem 3 fios. Qual é a cor do fio do meio?</a>
+            <a class="copy-link">Esse fio vai para o seu roteador. Ele está conectado atrás do roteador em qual porta?</a>
+            <a class="copy-link">Desligue o seu roteador e a caixinha da fibra da energia por 1 minuto e ligue-os novamente.<br>Assim que sua rede voltar, verifique se normalizou.</a>
+            <a class="copy-link">Vou realizar algumas configurações em sua rede e a conexão poderá cair algumas vezes.</a>
+            <a class="copy-link">Desligue a TV da energia, aguarde 10 segundos e religue-a.<br>Assim que a TV reiniciar, vá às configurações de rede e internet e verifique se ela está conectada à rede Wi-Fi.<br>Verifique se normalizou.</a>
+            <a class="copy-link">Se uma mesma frequência é utilizada simultaneamente entre diferentes sistemas, ocorre interferência e nenhum dos serviços funciona direito.</a>
+            <a class="copy-link">O Wi-Fi é uma onda de rádio e pode sofrer interferência de outras ondas, como a de um roteador de um vizinho configurado no mesmo canal que o seu.<br>Vou alterar o canal do Wi-Fi e reiniciar sua conexão. Assim que a rede voltar, verifique se normalizou.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">LINK LOSS</button>
+                <div class="panel">
+                    <a class="copy-link">SEM ACESSO<br>ALARM: -----<br>ÚLTIMO ACESSO: 00/00/0000 00:00:00<br>CTO: 0000<br>PERÍODO DE DISPONIBILIDADE: MATUTINO/VESPERTINO<br>CONTATO: --<br>TEL: (00) 0000-0000</a>
+                    <a class="copy-link">Identificamos um problema em sua fibra óptica. Vou gerar uma ordem de serviço para que um técnico vá ao local realizar o reparo.</a>
+                    <a class="copy-link">O prazo máximo para o reparo é de até 48 horas úteis.<br>O técnico responsável entrará em contato por telefone.</a>
+                    <a class="copy-link">Haverá alguém no local no período da manhã ou da tarde?</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Senha Wifi</button>
+                <div class="panel">
+		    <a class="copy-link">A senha da rede wifi "        " é:</a>
+            <a class="copy-link">Senha alterada para "         ". Sua conexão irá reiniciar; assim que voltar, insira a nova senha.</a>
+            <a class="copy-link">Nome da rede alterado para "        ". Sua conexão irá reiniciar; assim que voltar, conecte-se com a senha.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Lentidão/Quedas</button>
+                <div class="panel">
+		    <a class="copy-link">O problema foi notado em qual equipamento: Computador, Celular, Smart TV, Chromecast, IPTV, TV Box, etc.?</a>
+		    <a class="copy-link">O problema ocorre em algum site ou aplicativo específico?</a>
+            <a class="copy-link">O Wi-Fi é uma onda de rádio. A distância, a quantidade de paredes e as interferências de outras redes afetam o alcance do sinal.</a>
+            <a class="copy-link">A TV está conectada via Wi-Fi ou cabo de rede?</a>
+            <a class="copy-link">O acesso é feito por um aplicativo da própria TV, Chromecast, Fire Stick, TV Box ou IPTV?</a>
+            <a class="copy-link">O nome da rede Wi-Fi neste local é " - " e há " - " equipamentos conectados. Qual deles não está conectando?</a>
+            <a class="copy-link">Verifique se a rede "        " aparece para você e tente se conectar.<br>Se ocorrer algum erro, me informe, por favor.</a>
+                </div>
+            </div>
+            
+             <div class="accordion-item">
+                <button class="accordion">Whatsapp Aviso</button>
+                <div class="panel">
+                    <a class="copy-link">Nosso atendimento via WhatsApp é por ordem de chegada. Se tiver urgência ou emergência, entre em contato conosco por telefone.<br>Nosso número é o 0800 774 7878, opção "Suporte Técnico".</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">IPTV/TVBOX</button>
+                <div class="panel">
+                    <a class="copy-link">Esse tipo de aparelho não é homologado pela ANATEL, sendo o seu uso considerado pirataria. Ele possui um servidor próprio e não depende do seu provedor de internet.<br>Para testar, abra um vídeo no YouTube pelo seu celular. Se ele rodar sem travamentos, o problema está na sua TV Box/IPTV. Nesse caso, contate o seu fornecedor do serviço de IPTV.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Rede Indisponível</button>
+                <div class="panel">
+                     <a class="copy-link">No seu dispositivo, pressione o símbolo do Wi-Fi por 2 segundos. Selecione a opção "Esquecer Rede" e, em seguida, conecte-se novamente à sua rede Wi-Fi, digitando a senha.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Transferir para Financeiro</button>
+                <div class="panel">
+                    <a class="copy-link">Constatei que a sua solicitação não se refere ao suporte técnico. Vou transferi-lo para o setor responsável. Só um momento.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Acesso Remoto</button>
+                <div class="panel">
+		    <a class="copy-link">Tem algum programa de acesso remoto instalado neste computador como TeamViewer ou Anydesk?</a>
+		    <a class="copy-link">O problema foi notado em qual equipamento: Computador, Celular, Smart TV, Chromecast, IPTV, TV Box, etc.?</a>
+            <a class="copy-link">Acesse nosso site: https://netrubifibra.com.br<br>Selecione a cidade e clique em OK.<br>Role a página até o final. No canto direito, clique em "ACESSO REMOTO - TEAMVIEWER".<br>Baixe, instale e abra o programa. Em seguida, me informe sua ID.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Teste de Velocidade</button>
+                <div class="panel">
+                    <a class="copy-link">Durante o teste, deixe somente o aparelho que será testado conectado à rede.<br>Seu plano de 100 Mbps é dividido entre os aparelhos conectados. Por exemplo, com 2 equipamentos, a velocidade será de aproximadamente 50 Mbps para cada um. Com 4 equipamentos, será de 25 Mbps para cada, e assim por diante.</a>
+                    <a class="copy-link">Sua velocidade é dividida entre todos os equipamentos conectados. No momento, há 6 dispositivos em sua rede.<br>Durante o teste, deixe apenas o aparelho que será usado conectado à rede.<br>Fique próximo ao roteador e realize o teste.<br>Na rede 2.4 GHz ("Garcia"), o teste atingirá entre 30 e 50 Mbps, dependendo do adaptador de rede do smartphone.<br>Na rede 5.8 GHz ("Garcia-5G"), o teste atingirá entre 75 e 100 Mbps, dependendo do adaptador.</a>
+                    <a class="copy-link">Seu roteador fornece 100 Mbps, mas para que um único dispositivo receba toda essa velocidade, ele precisa ser compatível com a tecnologia 5.8 GHz AC.<br>Verifique se o seu ou outro aparelho na residência reconhece a rede "Garcia-5G" e refaça o teste.<br>Um computador conectado via cabo de rede também receberá os 100 Mbps.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Central do Cliente</button>
+                <div class="panel">
+                    <a class="copy-link">Acesse nosso site: https://netrubifibra.com.br<br><br>Selecione a cidade e clique em OK.<br>Vá até a "Central do Cliente". No primeiro acesso, o login é o seu CPF e a senha são os 4 primeiros dígitos do CPF.<br>O sistema pedirá para criar uma nova senha. Crie-a e faça o login com o novo usuário e senha.<br>Se preferir, você também pode ir até a loja física.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Garantia de Velocidade</button>
+                <div class="panel">
+                    <a class="copy-link">A garantia de entrega da velocidade contratada é válida para conexões via cabo de rede em um dispositivo compatível com porta Gigabit.<br>Caso não tenha um computador com cabo, realize o teste conectado à sua rede "Fernanda_5G".<br>O Wi-Fi é uma onda de rádio sobre a qual não temos controle total.<br>O modelo do dispositivo, interferências, objetos, paredes, etc., podem alterar a velocidade da banda.<br>Conecte o dispositivo do teste na rede "Fernanda_5G", fique próximo ao roteador e realize o teste.</a>
+                </div>
+            </div>
+	
+	<div class="accordion-item">
+                <button class="accordion">Rompimento/Manutenção</button>
+                <div class="panel">
+                    <a class="copy-link">SEM ACESSO<br>ALARM: -----<br>ÚLTIMO ACESSO: 00/00/0000 00:00:00<br>CTO: 0000<br>PERÍODO DE DISPONIBILIDADE: MATUTINO/VESPERTINO<br>CONTATO: --<br>TEL: (00) 0000-0000</a>
+                    <a class="copy-link">Identificamos um problema em sua fibra óptica. Vou gerar uma ordem de serviço para que um técnico vá ao local realizar o reparo.</a>
+                    <a class="copy-link">O prazo máximo para o reparo é de até 48 horas.<br>O técnico responsável entrará em contato por telefone.</a>
+                    <a class="copy-link">Haverá alguém no local no período da manhã ou da tarde?</a>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <div id="copy-toast">Copiado!</div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let mushroomClickCount = 0;
+
+        const searchBar = document.getElementById('search-bar');
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        const accButtons = document.querySelectorAll(".accordion");
+        const toast = document.getElementById("copy-toast");
+
+        // --- LÓGICA DO ACCORDION ---
+        accButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                const isActive = this.classList.contains('active');
+
+                // Fecha todos os outros acordeões
+                accButtons.forEach(otherButton => {
+                    if (otherButton !== this) {
+                        otherButton.classList.remove('active');
+                        otherButton.nextElementSibling.style.maxHeight = null;
+                    }
+                });
+
+                // Alterna (abre/fecha) o acordeão clicado
+                if (isActive) {
+                    this.classList.remove('active');
+                    this.nextElementSibling.style.maxHeight = null;
+                } else {
+                    this.classList.add('active');
+                    const panel = this.nextElementSibling;
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        });
+
+        // --- LÓGICA DE COPIAR PARA A ÁREA DE TRANSFERÊNCIA ---
+        const copyLinks = document.querySelectorAll(".copy-link");
+        copyLinks.forEach(link => {
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+                navigator.clipboard.writeText(this.innerText).then(() => {
+                    toast.textContent = 'Copiado!';
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 1500);
+                }).catch(err => console.error('Falha ao copiar texto: ', err));
+            });
+        });
+
+        // --- LÓGICA DO COGUMELO 1-UP ---
+        const mushroom = document.querySelector('.mario-mushroom');
+        const header = document.querySelector('header');
+
+        mushroom.addEventListener('click', () => {
+            mushroomClickCount++;
+            if (mushroomClickCount >= 5) {
+                mushroomClickCount = 0; // Reseta o contador
+                const oneUp = document.createElement('span');
+                oneUp.textContent = '+1 UP';
+                oneUp.className = 'one-up-text';
+                header.appendChild(oneUp);
+
+                // Remove o elemento após a animação terminar
+                setTimeout(() => {
+                    oneUp.remove();
+                }, 1500); // Deve corresponder à duração da animação no CSS
+            }
+        });
+
+        // --- LÓGICA DA BARRA DE PESQUISA ---
+        function filterContent() {
+            const searchTerm = searchBar.value.toLowerCase().trim();
+
+            accordionItems.forEach(item => {
+                const accordionButton = item.querySelector('.accordion');
+                const panel = item.querySelector('.panel');
+                const copyLinks = item.querySelectorAll('.copy-link');
+
+                const titleMatches = accordionButton.innerText.toLowerCase().includes(searchTerm);
+                let contentMatches = false;
+
+                // Primeiro, filtra os links dentro do painel
+                copyLinks.forEach(link => {
+                    if (searchTerm === '' || link.innerText.toLowerCase().includes(searchTerm)) {
+                        link.style.display = 'block';
+                        contentMatches = true;
+                    } else {
+                        link.style.display = 'none';
+                    }
+                });
+                
+                const itemShouldBeVisible = titleMatches || contentMatches;
+
+                if (searchTerm === '') {
+                    // Se a pesquisa estiver vazia, reseta tudo
+                    item.style.display = '';
+                    accordionButton.classList.remove('active');
+                    panel.style.maxHeight = null;
+                } else if (itemShouldBeVisible) {
+                    // Se houver correspondência, mostra o item e expande o painel
+                    item.style.display = '';
+                    accordionButton.classList.add('active');
+                    // IMPORTANTE: Recalcula a altura do scroll *depois* de ocultar/mostrar os links
+                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                } else {
+                    // Se não houver correspondência, oculta o item inteiro
+                    item.style.display = 'none';
+                    accordionButton.classList.remove('active');
+                    panel.style.maxHeight = null;
+                }
+            });
+        }
+
+        searchBar.addEventListener('keyup', filterContent);
+    });
+    </script>
+
+</body>
+</html>

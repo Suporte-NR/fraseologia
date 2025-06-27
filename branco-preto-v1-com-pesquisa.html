@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraseologias</title>
+    <style>
+        /* Estilos personalizados */
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #1c1e21;
+            --container-bg: #ffffff;
+            --container-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --header-border: #e0e0e0;
+            --accordion-bg: #e7f3ff;
+            --accordion-hover-bg: #d0e7ff;
+            --panel-bg: white;
+            --panel-border: #ddd;
+            --copy-link-bg: #f7f7f7;
+            --copy-link-hover-bg: #e9e9e9;
+            --copy-link-text: #333;
+            --theme-toggle-bg: #f0f2f5;
+            --theme-toggle-hover-bg: #e0e0e0;
+            --theme-toggle-color: #555;
+        }
+
+        .dark {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --container-bg: #1e1e1e;
+            --container-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --header-border: #333;
+            --accordion-bg: #2c3e50;
+            --accordion-hover-bg: #34495e;
+            --panel-bg: #282828;
+            --panel-border: #444;
+            --copy-link-bg: #333;
+            --copy-link-hover-bg: #444;
+            --copy-link-text: #e0e0e0;
+            --theme-toggle-bg: #2c3e50;
+            --theme-toggle-hover-bg: #34495e;
+            --theme-toggle-color: #e0e0e0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: var(--container-shadow);
+            padding: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+	    
+        }
+        header {
+            display: flex;
+            justify-content:space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--header-border);
+            padding-bottom: 15px;
+	    padding-left: 355px;
+            margin-bottom: 25px;
+            transition: border-bottom-color 0.3s;
+        }
+        h1 {
+            color: var(--text-color);
+            text-align: center;
+            margin: 0;
+            transition: color 0.3s;
+	    justify-content: center;
+        }
+        .search-input {
+            width: calc(100% - 32px);
+            padding: 12px 15px;
+            margin-bottom: 30px;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            border-radius: 5px;
+        }
+        .search-input::placeholder {
+            color: #999;
+        }
+        .search-input:focus {
+            border-color: var(--accordion-bg);
+        }
+        #theme-toggle {
+            background: var(--theme-toggle-bg);
+            color: var(--theme-toggle-color);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #theme-toggle:hover {
+            background: var(--theme-toggle-hover-bg);
+        }
+        .hidden {
+            display: none;
+        }
+        .accordion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        .accordion {
+            background-color: var(--accordion-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.4s;
+            border-radius: 5px;
+        }
+        .active, .accordion:hover {
+            background-color: var(--accordion-hover-bg);
+        }
+        .panel {
+            padding: 0 18px;
+            background-color: var(--panel-bg);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, background-color 0.3s;
+            border-left: 1px solid var(--panel-border);
+            border-right: 1px solid var(--panel-border);
+            border-bottom: 1px solid var(--panel-border);
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .copy-link {
+            display: block;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background-color: var(--copy-link-bg);
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--copy-link-text);
+            transition: background-color 0.2s;
+            border: 1px solid var(--panel-border);
+            white-space: pre-wrap;
+        }
+        .copy-link:hover {
+            background-color: var(--copy-link-hover-bg);
+            cursor: pointer;
+        }
+        #copy-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 16px;
+            border-radius: 5px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Fraseologias</h1>
+            <button id="theme-toggle" title="Alterar tema">
+                <!-- Ícone de Sol -->
+                <svg id="sun-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 7.072l.707-.707a1 1 0 10-1.414-1.414l-.707.707a1 1 0 001.414 1.414zM3 11a1 1 0 100-2H2a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                <!-- Ícone de Lua -->
+                <svg id="moon-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            </button>
+        </header>
+        <input type="text" id="search-bar" class="search-input" placeholder="Pesquisar frases...">
+
+        <div class="accordion-grid">
+            
+            <div class="accordion-item">
+                <button class="accordion">Saudações</button>
+                <div class="panel">
+                    <a class="copy-link">Bom dia, em que posso ajudar?</a>
+                    <a class="copy-link">Boa tarde, em que posso ajudar?</a>
+                    <a class="copy-link">Boa noite, em que posso ajudar?</a>
+                    <a class="copy-link">Bom dia, só um momento, vou verificar.</a>
+                    <a class="copy-link">Boa tarde, só um momento, vou verificar.</a>
+                    <a class="copy-link">Boa noite, só um momento, vou verificar.</a>
+		    
+                    
+                </div>
+            </div>
+	<div class="accordion-item">
+
+                <button class="accordion">Finalização</button>
+                <div class="panel">
+		    <a class="copy-link">Verifique se normalizou.</a>
+		    <a class="copy-link">No momento ajudo em algo mais ?</a>
+                    <a class="copy-link">Qualquer dúvida ou dificuldade, estamos à disposição. Tenha um bom dia.</a>
+                    
+		    
+                   
+  
+                </div>
+            </div>
+
+            <!-- Todos os outros .accordion-item permanecem aqui... -->
+             <div class="accordion-item">
+                <button class="accordion">Suporte</button>
+                <div class="panel">
+  		    <a class="copy-link">Sua conexão irá reiniciar. Assim que a rede voltar, verifique se normalizou.</a>
+		    <a class="copy-link">Desligue o seu roteador e a caixa da fibra da energia e mantenha-os desligados. Vou realizar um teste daqui.<br>Assim que desligar, me informe, por favor.</a>
+                    <a class="copy-link">Desligue o seu roteador da energia e mantenha-o desligado. Vou realizar um teste daqui.<br>Assim que desligar, me informe, por favor.</a>
+                    <a class="copy-link">Ligue novamente o seu roteador, por favor.</a>
+                    <a class="copy-link">Ligue somente a caixa da fibra, por favor.</a>
+                    <a class="copy-link">Religue os dois equipamentos, por favor.</a>
+                    <a class="copy-link">A caixinha da fibra (o aparelho branco pequeno, sem antena) está com uma luz vermelha acessa ?</a>
+		    <a class="copy-link">Tem uma luz laranja acessa no seu roteador ?</a>
+		    <a class="copy-link">O roteador está ligado direto na tomada ou em algum adaptador, filtro de linha, extensão, "T", etc..?</a>
+                    <a class="copy-link">Da caixa da fibra saem 3 fios. Qual é a cor do fio do meio?</a>
+                    <a class="copy-link">Esse fio vai para o seu roteador. Ele está conectado atrás do roteador em qual porta?</a>
+                    <a class="copy-link">Desligue o seu roteador e a caixinha da fibra da energia por 1 minuto e ligue-os novamente.<br>Assim que sua rede voltar, verifique se normalizou.</a>
+                    <a class="copy-link">Vou realizar algumas configurações em sua rede e a conexão poderá cair algumas vezes.</a>
+                    <a class="copy-link">Desligue a TV da energia, aguarde 10 segundos e religue-a.<br>Assim que a TV reiniciar, vá às configurações de rede e internet e verifique se ela está conectada à rede Wi-Fi.<br>Verifique se normalizou.</a>
+                    <a class="copy-link">Se uma mesma frequência é utilizada simultaneamente entre diferentes sistemas, ocorre interferência e nenhum dos serviços funciona direito.</a>
+                    <a class="copy-link">O Wi-Fi é uma onda de rádio e pode sofrer interferência de outras ondas, como a de um roteador de um vizinho configurado no mesmo canal que o seu.<br>Vou alterar o canal do Wi-Fi e reiniciar sua conexão. Assim que a rede voltar, verifique se normalizou.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">LINK LOSS</button>
+                <div class="panel">
+                    <a class="copy-link">SEM ACESSO<br>ALARM: -----<br>ÚLTIMO ACESSO: 00/00/0000 00:00:00<br>CTO: 0000<br>PERÍODO DE DISPONIBILIDADE: MATUTINO/VESPERTINO<br>CONTATO: --<br>TEL: (00) 0000-0000</a>
+                    <a class="copy-link">Identificamos um problema em sua fibra óptica. Vou gerar uma ordem de serviço para que um técnico vá ao local realizar o reparo.</a>
+                    <a class="copy-link">O prazo máximo para o reparo é de até 48 horas úteis.<br>O técnico responsável entrará em contato por telefone.</a>
+                    <a class="copy-link">Haverá alguém no local no período da manhã ou da tarde?</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Senha Wifi</button>
+                <div class="panel">
+		    <a class="copy-link">A senha da rede wifi "		" é:</a>
+                    <a class="copy-link">Senha alterada para "         ". Sua conexão irá reiniciar; assim que voltar, insira a nova senha.</a>
+                    <a class="copy-link">Nome da rede alterado para "        ". Sua conexão irá reiniciar; assim que voltar, conecte-se com a senha.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Lentidão/Quedas</button>
+                <div class="panel">
+		    <a class="copy-link">O problema foi notado em qual equipamento: Computador, Celular, Smart TV, Chromecast, IPTV, TV Box..etc?</a>
+		    <a class="copy-link">O problema ocorre em algum site ou aplicativo específico?</a>
+                    <a class="copy-link">O Wi-Fi é uma onda de rádio. A distância, a quantidade de paredes e as interferências de outras redes afetam o alcance do sinal.</a>
+                    <a class="copy-link">A TV está conectada via Wi-Fi ou cabo de rede?</a>
+                    <a class="copy-link">O acesso é feito por um aplicativo da própria TV, Chromecast, Fire Stick, TV Box ou IPTV?</a>
+                    <a class="copy-link">O nome da rede Wi-Fi neste local é " - " e há " - " equipamentos conectados. Qual deles não está conectando?</a>
+                    <a class="copy-link">Verifique se a rede "         " aparece para você e tente se conectar.<br>Se ocorrer algum erro, me informe, por favor.</a>
+                </div>
+            </div>
+            
+             <div class="accordion-item">
+                <button class="accordion">Whatsapp Aviso</button>
+                <div class="panel">
+                    <a class="copy-link">Nosso atendimento via WhatsApp é por ordem de chegada. Se tiver urgência ou emergência, entre em contato conosco por telefone.<br>Nosso número é o 0800 774 7878, opção "Suporte Técnico".</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">IPTV/TVBOX</button>
+                <div class="panel">
+                    <a class="copy-link">Esse tipo de aparelho não é homologado pela ANATEL, sendo o seu uso considerado pirataria. Ele possui um servidor próprio e não depende do seu provedor de internet.<br>Para testar, abra um vídeo no YouTube pelo seu celular. Se ele rodar sem travamentos, o problema está na sua TV Box/IPTV. Nesse caso, contate o seu fornecedor do serviço de IPTV.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Rede Indisponível</button>
+                <div class="panel">
+                     <a class="copy-link">No seu dispositivo, pressione o símbolo do Wi-Fi por 2 segundos. Selecione a opção "Esquecer Rede" e, em seguida, conecte-se novamente à sua rede Wi-Fi, digitando a senha.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Transferir para Financeiro</button>
+                <div class="panel">
+                    <a class="copy-link">Constatei que a sua solicitação não se refere ao suporte técnico. Vou transferi-lo para o setor responsável. Só um momento.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Acesso Remoto</button>
+                <div class="panel">
+		    <a class="copy-link">Tem algum programa de acesso remoto instalado neste computador como TeamViewer ou Anydesk ?</a>
+		    <a class="copy-link">O problema foi notado em qual equipamento: Computador, Celular, Smart TV, Chromecast, IPTV, TV Box..etc?</a>
+                    <a class="copy-link">Acesse nosso site: https://netrubifibra.com.br<br>Selecione a cidade e clique em OK.<br>Role a página até o final. No canto direito, clique em "ACESSO REMOTO - TEAMVIEWER".<br>Baixe, instale e abra o programa. Em seguida, me informe sua ID.</a>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion">Teste de Velocidade</button>
+                <div class="panel">
+                    <a class="copy-link">Durante o teste, deixe somente o aparelho que será testado conectado à rede.<br>Seu plano de 100 Mbps é dividido entre os aparelhos conectados. Por exemplo, com 2 equipamentos, a velocidade será de aproximadamente 50 Mbps para cada um. Com 4 equipamentos, será de 25 Mbps para cada, e assim por diante.</a>
+                    <a class="copy-link">Sua velocidade é dividida entre todos os equipamentos conectados. No momento, há 6 dispositivos em sua rede.<br>Durante o teste, deixe apenas o aparelho que será usado conectado à rede.<br>Fique próximo ao roteador e realize o teste.<br>Na rede 2.4 GHz ("Garcia"), o teste atingirá entre 30 e 50 Mbps, dependendo do adaptador de rede do smartphone.<br>Na rede 5.8 GHz ("Garcia-5G"), o teste atingirá entre 75 e 100 Mbps, dependendo do adaptador.</a>
+                    <a class="copy-link">Seu roteador fornece 100 Mbps, mas para que um único dispositivo receba toda essa velocidade, ele precisa ser compatível com a tecnologia 5.8 GHz AC.<br>Verifique se o seu ou outro aparelho na residência reconhece a rede "Garcia-5G" e refaça o teste.<br>Um computador conectado via cabo de rede também receberá os 100 Mbps.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Central do Cliente</button>
+                <div class="panel">
+                    <a class="copy-link">Acesse nosso site: https://netrubifibra.com.br<br><br>Selecione a cidade e clique em OK.<br>Vá até a "Central do Cliente". No primeiro acesso, o login é o seu CPF e a senha são os 4 primeiros dígitos do CPF.<br>O sistema pedirá para criar uma nova senha. Crie-a e faça o login com o novo usuário e senha.<br>Se preferir, você também pode ir até a loja física.</a>
+                </div>
+            </div>
+            
+            <div class="accordion-item">
+                <button class="accordion">Garantia de Velocidade</button>
+                <div class="panel">
+                    <a class="copy-link">A garantia de entrega da velocidade contratada é válida para conexões via cabo de rede em um dispositivo compatível com porta Gigabit.<br>Caso não tenha um computador com cabo, realize o teste conectado à sua rede "Fernanda_5G".<br>O Wi-Fi é uma onda de rádio sobre a qual não temos controle total.<br>O modelo do dispositivo, interferências, objetos, paredes, etc., podem alterar a velocidade da banda.<br>Conecte o dispositivo do teste na rede "Fernanda_5G", fique próximo ao roteador e realize o teste.</a>
+                </div>
+            </div>
+	
+	<div class="accordion-item">
+                <button class="accordion">Rompimento/Manutenção</button>
+                <div class="panel">
+                    <a class="copy-link">SEM ACESSO<br>ALARM: -----<br>ÚLTIMO ACESSO: 00/00/0000 00:00:00<br>CTO: 0000<br>PERÍODO DE DISPONIBILIDADE: MATUTINO/VESPERTINO<br>CONTATO: --<br>TEL: (00) 0000-0000</a>
+                    <a class="copy-link">Identificamos um problema em sua fibra óptica. Vou gerar uma ordem de serviço para que um técnico vá ao local realizar o reparo.</a>
+                    <a class="copy-link">O prazo máximo para o reparo é de até 48 horas.<br>O técnico responsável entrará em contato por telefone.</a>
+                    <a class="copy-link">Haverá alguém no local no período da manhã ou da tarde?</a>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <div id="copy-toast">Copiado!</div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- LÓGICA DO MODO ESCURO ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        const userTheme = localStorage.getItem('theme');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        const themeCheck = () => {
+            if (userTheme === 'dark' || (!userTheme && systemTheme)) {
+                document.documentElement.classList.add('dark');
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        };
+
+        const themeSwitch = () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+            }
+        };
+
+        themeToggle.addEventListener('click', themeSwitch);
+        themeCheck();
+
+        // --- LÓGICA DO ACCORDION ---
+        const acc = document.getElementsByClassName("accordion");
+        for (let i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                const panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+
+        // --- LÓGICA DE COPIAR PARA A ÁREA DE TRANSFERÊNCIA ---
+        const copyLinks = document.getElementsByClassName("copy-link");
+        const toast = document.getElementById("copy-toast");
+
+        for (let i = 0; i < copyLinks.length; i++) {
+            copyLinks[i].addEventListener("click", function(event) {
+                event.preventDefault(); 
+                
+                const textToCopy = this.innerText; 
+
+                // Usando a API de área de transferência do navegador
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    // Exibir notificação
+                    toast.style.opacity = 1;
+                    setTimeout(() => {
+                        toast.style.opacity = 0;
+                    }, 1500); 
+                }).catch(err => {
+                    console.error('Falha ao copiar texto: ', err);
+                    // Fallback para usuários com navegadores mais antigos
+                    try {
+                        const textArea = document.createElement("textarea");
+                        textArea.value = textToCopy;
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        
+                        toast.style.opacity = 1;
+                        setTimeout(() => {
+                            toast.style.opacity = 0;
+                        }, 1500);
+                    } catch (e) {
+                         alert("Erro ao copiar texto.");
+                    }
+                });
+            });
+        }
+
+        // --- LÓGICA DA BARRA DE PESQUISA ---
+        const searchBar = document.getElementById('search-bar');
+        const accordionItems = document.querySelectorAll('.accordion-item');
+
+        function filterContent() {
+            const searchTerm = searchBar.value.toLowerCase().trim();
+
+            accordionItems.forEach(item => {
+                const accordionButton = item.querySelector('.accordion');
+                const panel = item.querySelector('.panel');
+                const copyLinks = item.querySelectorAll('.copy-link');
+
+                const titleMatches = accordionButton.innerText.toLowerCase().includes(searchTerm);
+                let contentMatches = false;
+
+                // Filtra os links dentro do painel e verifica se há correspondência de conteúdo
+                copyLinks.forEach(link => {
+                    if (searchTerm === '' || link.innerText.toLowerCase().includes(searchTerm)) {
+                        link.style.display = 'block';
+                        contentMatches = true;
+                    } else {
+                        link.style.display = 'none';
+                    }
+                });
+                
+                const itemShouldBeVisible = titleMatches || contentMatches;
+
+                if (searchTerm === '') {
+                    // Se a pesquisa estiver vazia, reseta tudo
+                    item.style.display = '';
+                    accordionButton.classList.remove('active');
+                    panel.style.maxHeight = null;
+                } else if (itemShouldBeVisible) {
+                    // Se houver correspondência, mostra o item e expande o painel
+                    item.style.display = '';
+                    accordionButton.classList.add('active');
+                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                } else {
+                    // Se não houver correspondência, oculta o item inteiro
+                    item.style.display = 'none';
+                    accordionButton.classList.remove('active');
+                    panel.style.maxHeight = null;
+                }
+            });
+        }
+        searchBar.addEventListener('keyup', filterContent);
+    });
+    </script>
+
+</body>
+</html>
